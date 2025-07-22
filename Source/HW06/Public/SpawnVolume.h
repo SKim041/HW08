@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "SpawnVolume.generated.h"
 
+struct FSpawnRow;
 class UBoxComponent;
 
 UCLASS()
@@ -21,11 +22,13 @@ public:
 	USceneComponent* Scene;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Spawning")
 	UBoxComponent* SpawningBox;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-	TSubclassOf<AActor> ItemClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
+	UDataTable* ItemDataTable;
 
 	FVector GetRandomPointInVolume() const;
-	AActor* SpawnItem();
+	AActor* SpawnItem(TSubclassOf<AActor> ItemClass);
+	FSpawnRow* GetRandomItemByLevel(int32 Level) const;
+	void SpawnRandomItemByLevel(int32 Level);
 
 
 };

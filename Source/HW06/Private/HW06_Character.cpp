@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "HW06_Character.h"
@@ -12,6 +12,8 @@
 #include "Components/WidgetComponent.h"
 #include "Components/RichTextBlock.h"
 #include "HW06_GameInstance.h"
+#include "MovingObstacleBase.h"
+#include "RotatingObstacleBase.h"
 
 // Sets default values
 AHW06_Character::AHW06_Character()
@@ -32,7 +34,7 @@ AHW06_Character::AHW06_Character()
 	OverheadWidget->SetupAttachment(GetMesh());
 	OverheadWidget->SetWidgetSpace(EWidgetSpace::Screen);	
 
-	// Movement ÃÊ±âÈ­
+	// Movement ì´ˆê¸°í™”
 	NormalSpeed = 200.0f;
 	SprintMultiplier = 1.7f;
 	MouseSensitivity = 1.0f;
@@ -45,8 +47,18 @@ void AHW06_Character::BeginPlay()
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
-	
+	OriginLocation=GetActorLocation();
+	RespawnTransform = GetActorTransform();
 	UpdateOverheadHP();
+
+	FTimerHandle UpdateRespawnTransformTimer;
+	GetWorld()->GetTimerManager().SetTimer(
+		UpdateRespawnTransformTimer,
+		this,
+		&AHW06_Character::UpdateRespawnTransform,
+		2.0f,
+		true
+	);
 }
 
 // Called every frame
@@ -54,12 +66,12 @@ void AHW06_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Ä³¸¯ÅÍ Á¤Áö ½Ã ¹°Ã¼ Åë°ú ¹æÁö
+	// ìºë¦­í„° ì •ì§€ ì‹œ ë¬¼ì²´ í†µê³¼ ë°©ì§€
 	FHitResult OutHit;
 	GetCharacterMovement()->SafeMoveUpdatedComponent(FVector(0.f, 0.f, 0.01f), GetActorRotation(), true, OutHit);
 	GetCharacterMovement()->SafeMoveUpdatedComponent(FVector(0.f, 0.f, -0.01f), GetActorRotation(), true, OutHit);
 
-	if (GetActorLocation().Z < -100) 
+	if (GetActorLocation().Z < OriginLocation.Z-500) 
 	{
 		Die();
 		UE_LOG(LogTemp, Display, TEXT("Die"));
@@ -74,6 +86,7 @@ void AHW06_Character::Die()
 		GameMode->OnPlayerDeath(GetController());
 	}
 }
+
 void AHW06_Character::UpdateOverheadHP() 
 {
 	if (!OverheadWidget) return;
@@ -89,11 +102,26 @@ void AHW06_Character::UpdateOverheadHP()
 			{
 				HPString += TEXT("\u2764\uFE0F");
 			}
-			UE_LOG(LogTemp, Warning, TEXT("update hp: %d"), GameInstance->GetRemainingLives());
 			HPText->SetText(FText::FromString(HPString));
 		}
 	}
 }
+void AHW06_Character::UpdateRespawnTransform()
+{
+	FHitResult FloorHit = GetCharacterMovement()->CurrentFloor.HitResult;
+	AActor* FloorActor = FloorHit.GetActor();
+	
+	if (FloorActor && !FloorActor->IsA(AMovingObstacleBase::StaticClass()) && !FloorActor->IsA(ARotatingObstacleBase::StaticClass()))
+	{
+		RespawnTransform=GetActorTransform();
+	}  
+}
+
+FTransform AHW06_Character::GetRespawnTransform()
+{
+	return RespawnTransform;
+}
+
 // Called to bind functionality to input
 void AHW06_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "MovingObstacleBase.h"
@@ -20,7 +20,7 @@ AMovingObstacleBase::AMovingObstacleBase()
 void AMovingObstacleBase::BeginPlay()
 {
 	Super::BeginPlay();
-	// Ã³À½ À§Ä¡ ÀúÀå
+	// ì²˜ìŒ ìœ„ì¹˜ ì €ì¥
 	OriginPosition = GetActorLocation();
 	if (MoveVelocity == FVector::ZeroVector) 
 	{

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "HW06_GameInstance.h"
@@ -31,9 +31,9 @@ void UHW06_GameInstance::AddToCount()
 	UE_LOG(LogTemp, Warning, TEXT("TotalCandyCount: %d"), TotalCandyCount);
 }
 
-void UHW06_GameInstance::LoseLife() 
+void UHW06_GameInstance::UpdateRemainingLives(int32 LivesChange) 
 {
-	RemainingLives = FMath::Clamp(RemainingLives - 1, 0, MaxLives);
+	RemainingLives = FMath::Clamp(RemainingLives + LivesChange, 0, MaxLives);
 	UE_LOG(LogTemp, Warning, TEXT("Remaining Lives: %d"), RemainingLives);
 }
 
