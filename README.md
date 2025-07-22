@@ -8,8 +8,7 @@
 - 해당 레벨의 모든 사탕을 모으지 못하면 종료 지점에 도달해도 레벨을 끝낼 수 없다.
 
 ## 🎬플레이 영상
-추후 영상 업데이트 예정
- [![YouTube](https://img.youtube.com/vi/OiMeScbH7kQ/0.jpg)](https://www.youtube.com/watch?v=OiMeScbH7kQ)
+ [![YouTube](https://img.youtube.com/vi/EjW6DnwgEJ0/0.jpg)](https://www.youtube.com/watch?v=EjW6DnwgEJ0)
 ## 📌추가 구현 기능
 1. 레벨별 랜덤 스폰되는 아이템
    - 💊힐링 포션: 먹으면 목숨 +1, 최대 목숨에 도달하면 더이상 채워지지 않는다.
